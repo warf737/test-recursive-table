@@ -26,9 +26,10 @@
     methods: {
       _resetForm() {
         this.dialogData = {
+          id: null,
           name: '',
-            phone: '',
-            parentId: null,
+          phone: '',
+          parentId: null,
         };
       },
       handleClose() {

@@ -14,42 +14,50 @@
           {
             id: 1,
             name: 'name1',
-            phone: '123456789+1'
+            phone: '123456789+1',
+            parentId: null,
           },
           {
             id: 2,
             name: 'name2',
-            phone: '123456789+2'
+            phone: '123456789+2',
+            parentId: null,
           },
           {
             id: 3,
             name: 'name3',
             phone: '123456789+3',
+            parentId: null,
             children: [
               {
                 id: 31,
                 name: 'name31',
-                phone: '123456789+31'
+                phone: '123456789+31',
+                parentId: 3,
               },
               {
                 id: 32,
                 name: 'name32',
                 phone: '123456789+32',
+                parentId: 3,
                 children: [
                   {
-                    id: 311,
+                    id: 321,
                     name: 'name311',
                     phone: '123456789+311',
+                    parentId: 32,
                     children: [
                       {
-                        id: 3111,
+                        id: 3211,
                         name: 'name3111',
                         phone: '123456789+3111',
+                        parentId: 322,
                       },
                       {
-                        id: 3112,
+                        id: 3212,
                         name: 'name3112',
                         phone: '123456789+3112',
+                        parentId: null,
                       }
                     ]
                   }]
@@ -58,10 +66,20 @@
           {
             id: 4,
             name: 'name4',
-            phone: '123456789+4'
+            phone: '123456789+4',
+            parentId: null,
           }],
         isDialogVisible: false,
       };
+    },
+    mounted() {
+      if (localStorage.getItem('tableData')) {
+        try {
+          this.tableData = JSON.parse(localStorage.getItem('tableData'));
+        } catch(error) {
+          localStorage.removeItem('tableData');
+        }
+      }
     },
     computed: {
       // TODO добавить руководителей из вложенных записей
@@ -78,18 +96,30 @@
         this.isDialogVisible = !this.isDialogVisible;
       },
       handleSave(data) {
-        console.log('saved', data);
 
-        const newId = this.getRandomId();
-        this.tableData.push({
+        const isChild = Boolean(data.parentId);
+        const newId = this._getRandomId();
+        console.log('1', data);
+        const newUser = {
           id: newId,
           name: data.name,
           phone: data.phone,
-          parentId: data.parentId
-        });
+          parentId: data.parentId ? data.parentId : null
+        };
 
+        if(!isChild) {
+          this.tableData.push(newUser);
+        } else {
+          console.log('функционал пока не доступен :(');
+        }
+
+        this._saveData();
       },
-      getRandomId() {
+      _saveData() {
+        const parsed = JSON.stringify(this.tableData);
+        localStorage.setItem('tableData', parsed);
+      },
+      _getRandomId() {
         const newId = generateRandomId();
         const isExistId = this.userIdList.find(userId => userId === newId);
 

@@ -22,25 +22,28 @@
           children: [],
         },
         formLabelWidth: '120px',
+        inputNameRules: [
+          { required: true, message: 'Заполните поле' }
+        ]
       }
     },
     methods: {
       _resetForm() {
-        this.dialogData = {
-          id: null,
-          name: '',
-          phone: '',
-          parentId: null,
-          children: [],
-        };
+        this.$refs.dialogData.resetFields();
       },
       handleClose() {
         this._resetForm();
         this.$emit('close');
       },
       handleSubmit() {
-        this.$emit('submit', this.dialogData);
-        this.handleClose();
+        this.$refs.dialogData.validate((valid) => {
+          if (valid) {
+            this.$emit('submit', this.dialogData);
+            this.handleClose();
+          } else {
+            return false;
+          }
+        });
       }
     },
   }
@@ -51,14 +54,18 @@
   <el-dialog
     title="Добавление пользователя"
     :visible.sync="isDialogVisible"
+    :show-close="false"
     >
 
-    <el-form :model="dialogData">
+    <el-form :model="dialogData" ref="dialogData">
 
       <el-form-item label="Имя"
-                    :label-width="formLabelWidth">
+                    prop="name"
+                    :label-width="formLabelWidth"
+                    :rules="inputNameRules">
 
         <el-input v-model="dialogData.name"
+                  type="name"
                   autocomplete="off"/>
       </el-form-item>
 
@@ -89,7 +96,7 @@
 
     <span slot="footer" class="dialog-footer">
     <el-button @click="handleClose">Отменить</el-button>
-    <el-button type="primary" @click="handleSubmit">Сохранить</el-button>
+    <el-button type="primary" @click="handleSubmit()">Сохранить</el-button>
   </span>
   </el-dialog>
 

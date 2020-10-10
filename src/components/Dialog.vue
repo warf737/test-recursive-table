@@ -29,7 +29,9 @@
     },
     methods: {
       _resetForm() {
-        this.$refs.dialogData.resetFields();
+        this.dialogData = {
+
+        }
       },
       handleClose() {
         this._resetForm();
@@ -55,6 +57,7 @@
     title="Добавление пользователя"
     :visible.sync="isDialogVisible"
     :show-close="false"
+    :destroy-on-close="true"
     >
 
     <el-form :model="dialogData" ref="dialogData">
@@ -95,8 +98,8 @@
     </el-form>
 
     <span slot="footer" class="dialog-footer">
-    <el-button @click="handleClose">Отменить</el-button>
-    <el-button type="primary" @click="handleSubmit()">Сохранить</el-button>
+      <el-button type="primary" @click="handleSubmit()">Сохранить</el-button>
+      <el-button @click="handleClose">Отменить</el-button>
   </span>
   </el-dialog>
 

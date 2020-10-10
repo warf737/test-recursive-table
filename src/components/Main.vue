@@ -118,11 +118,11 @@
 
       <section class="main__top">
 
-        <el-button class="main__button"
+        <el-button class="main__button-create"
                    type="success"
                    round
                    @click="handleChangeVisible"
-        >Добавить
+        >Добавить запись
         </el-button>
 
       </section>

@@ -25,13 +25,20 @@
       }
     },
     computed: {
-      // TODO добавить руководителей из вложенных записей
       userIdList() {
-        return this.tableData.map(position => ({
-            name: position.name,
-            id: position.id,
-          })
-        )
+        let userList = [];
+
+        const getUserData = (e) => {
+          userList.push({
+            id: e.id,
+            name: e.name,
+          });
+          e.children && e.children.forEach(getUserData);
+        };
+
+        this.tableData.forEach(getUserData);
+
+        return userList;
       },
     },
     methods: {
@@ -42,28 +49,49 @@
 
         const isChild = Boolean(data.parentId);
         const newId = this._getRandomId();
-        console.log('1', data);
         const newUser = {
           id: newId,
           name: data.name,
           phone: data.phone,
-          parentId: data.parentId ? data.parentId : null
+          parentId: data.parentId ? data.parentId : null,
+          children: data.children,
         };
+
 
         if(!isChild) {
           this.tableData.push(newUser);
         } else {
-          console.log('функционал пока не доступен :(');
+          let updatedUser = null;
+          for (let i = 0; updatedUser === null && i < this.tableData.length; i++) {
+            updatedUser = this._searchUser(this.tableData[i], newUser.parentId);
+          }
+
+          updatedUser.children.push(newUser);
         }
 
         this._saveData(this.tableData);
       },
+      _searchUser(user, matchingUserId) {
+        const isMatchingResult = user.id === matchingUserId;
+        const isUserHasChildren = Boolean(user.children);
+
+        if (isMatchingResult) {
+          return user;
+        } else if (isUserHasChildren) {
+          let result = null;
+          for (let i = 0; result === null && i < user.children.length; i++) {
+            result = this._searchUser(user.children[i], matchingUserId);
+          }
+          return result;
+        }
+        return null;
+        },
       _getData() {
         this.tableData = JSON.parse(localStorage.getItem('tableData'));
       },
-      _clearData() {
-        localStorage.removeItem('tableData');
-      },
+      // _clearData() {
+      //   localStorage.removeItem('tableData');
+      // },
       _saveData(data) {
         const parsed = JSON.stringify(data);
         localStorage.setItem('tableData', parsed);

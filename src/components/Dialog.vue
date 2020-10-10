@@ -19,6 +19,7 @@
           name: '',
           phone: '',
           parentId: null,
+          children: [],
         },
         formLabelWidth: '120px',
       }
@@ -30,6 +31,7 @@
           name: '',
           phone: '',
           parentId: null,
+          children: [],
         };
       },
       handleClose() {

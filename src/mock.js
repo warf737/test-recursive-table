@@ -1,60 +1,67 @@
 export const mockData = [
-  {
-  id: 1,
-  name: 'name1',
-  phone: '123456789+1',
-  parentId: null,
-  },
+  // {
+  // id: 1,
+  // name: 'Марина',
+  // phone: '+7 941 123 00 01',
+  // parentId: null,
+  // children: []
+  // },
   {
     id: 2,
-    name: 'name2',
-    phone: '123456789+2',
+    name: 'Петр',
+    phone: '+7 941 123 00 02',
     parentId: null,
+    children: []
   },
   {
     id: 3,
-    name: 'name3',
-    phone: '123456789+3',
+    name: 'Алексей',
+    phone: '+7 941 123 00 03',
     parentId: null,
     children: [
       {
         id: 31,
-        name: 'name31',
-        phone: '123456789+31',
+        name: 'Иван',
+        phone: '+7 941 123 00 31',
         parentId: 3,
+        children: []
       },
-      {
-        id: 32,
-        name: 'name32',
-        phone: '123456789+32',
-        parentId: 3,
-        children: [
-          {
-            id: 321,
-            name: 'name311',
-            phone: '123456789+311',
-            parentId: 32,
-            children: [
-              {
-                id: 3211,
-                name: 'name3111',
-                phone: '123456789+3111',
-                parentId: 322,
-              },
-              {
-                id: 3212,
-                name: 'name3112',
-                phone: '123456789+3112',
-                parentId: null,
-              }
-            ]
-          }]
-      }]
+  ],
+      // {
+      //   id: 32,
+      //   name: 'Владимир',
+      //   phone: '+7 941 123 00 32',
+      //   parentId: 3,
+      //   children: [
+      //     {
+      //       id: 321,
+      //       name: 'Кирилл',
+      //       phone: '+7 941 123 03 21',
+      //       parentId: 32,
+      //       children: [
+      //         {
+      //           id: 3211,
+      //           name: 'Олег',
+      //           phone: '+7 941 123 32 11',
+      //           parentId: 322,
+      //           children: []
+      //         },
+      //         {
+      //           id: 3212,
+      //           name: 'Ихтиандр',
+      //           phone: '+7 941 123 32 12',
+      //           parentId: null,
+      //           children: []
+      //         }
+      //       ]
+      //     }]
+      // }]
   },
-  {
-    id: 4,
-    name: 'name4',
-    phone: '123456789+4',
-    parentId: null,
-  }
+  // {
+  //   id: 4,
+  //   name: 'Мария',
+  //   phone: '+7 941 123 00 04',
+  //   parentId: null,
+  //   children: []
+  // }
 ];

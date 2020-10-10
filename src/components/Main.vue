@@ -1,4 +1,5 @@
 <script>
+  import { generateRandomId } from '../utils/utils';
   import Table from '@/components/Table';
   import Dialog from '@/components/Dialog';
   export default {
@@ -63,7 +64,8 @@
       };
     },
     computed: {
-      managersList() {
+      // TODO добавить руководителей из вложенных записей
+      userIdList() {
         return this.tableData.map(position => ({
             name: position.name,
             id: position.id,
@@ -75,9 +77,28 @@
       handleChangeVisible() {
         this.isDialogVisible = !this.isDialogVisible;
       },
-      handleSave() {
-        console.log('saved');
-      }
+      handleSave(data) {
+        console.log('saved', data);
+
+        const newId = this.getRandomId();
+        this.tableData.push({
+          id: newId,
+          name: data.name,
+          phone: data.phone,
+          parentId: data.parentId
+        });
+
+      },
+      getRandomId() {
+        const newId = generateRandomId();
+        const isExistId = this.userIdList.find(userId => userId === newId);
+
+        if (isExistId) {
+          this.getRandomId();
+        } else {
+          return newId;
+        }
+      },
     }
   }
 </script>
@@ -102,7 +123,7 @@
       <Table :tableData="tableData"/>
 
       <Dialog :isDialogVisible="isDialogVisible"
-              :managersList="managersList"
+              :userIdList="userIdList"
               @close="handleChangeVisible"
               @submit="handleSave"
       />

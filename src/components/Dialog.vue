@@ -1,4 +1,5 @@
 <script>
+
   export default {
     name: 'Dialog',
     props: {
@@ -6,7 +7,7 @@
         type: Boolean,
         required: true,
       },
-      managersList: {
+      userIdList: {
         type: Array,
         required: true,
       },
@@ -14,6 +15,7 @@
     data() {
       return {
         dialogData: {
+          id: null,
           name: '',
           phone: '',
           parentId: null,
@@ -34,7 +36,7 @@
         this.$emit('close');
       },
       handleSubmit() {
-        this.$emit('submit');
+        this.$emit('submit', this.dialogData);
         this.handleClose();
       }
     },
@@ -60,7 +62,7 @@
       <el-form-item label="Телефон"
                     :label-width="formLabelWidth">
 
-        <el-input v-model="dialogData.name"
+        <el-input v-model="dialogData.phone"
                   autocomplete="off"/>
 
       </el-form-item>
@@ -69,13 +71,14 @@
                     :label-width="formLabelWidth">
 
         <el-select class="custom-select"
-                   v-model="dialogData.phone"
-                   placeholder="Выберите руководителя">
+                   v-model="dialogData.parentId"
+                   placeholder="Выберите руководителя"
+                   clearable>
 
-            <el-option v-for="(manager, index) in managersList"
+            <el-option v-for="(user, index) in userIdList"
                        :key="index"
-                       :label="manager.name"
-                       :value="manager.id"/>
+                       :label="user.name"
+                       :value="user.id"/>
 
         </el-select>
       </el-form-item>
@@ -92,10 +95,10 @@
 
 
 <style>
-  /*.custom-select {*/
-  /*   display: block;*/
-  /*}*/
-  /*.el-form-item__label {*/
-  /*  text-align: left;*/
-  /*}*/
+  .el-select {
+     display: block !important;
+  }
+  .el-form-item__label {
+    text-align: left !important;
+  }
 </style>

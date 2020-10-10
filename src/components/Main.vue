@@ -2,6 +2,8 @@
   import { generateRandomId } from '../utils/utils';
   import Table from '@/components/Table';
   import Dialog from '@/components/Dialog';
+  import { mockData }  from '../mock';
+
   export default {
     name: 'Main',
     components: {
@@ -10,75 +12,16 @@
     },
     data() {
       return {
-        tableData: [
-          {
-            id: 1,
-            name: 'name1',
-            phone: '123456789+1',
-            parentId: null,
-          },
-          {
-            id: 2,
-            name: 'name2',
-            phone: '123456789+2',
-            parentId: null,
-          },
-          {
-            id: 3,
-            name: 'name3',
-            phone: '123456789+3',
-            parentId: null,
-            children: [
-              {
-                id: 31,
-                name: 'name31',
-                phone: '123456789+31',
-                parentId: 3,
-              },
-              {
-                id: 32,
-                name: 'name32',
-                phone: '123456789+32',
-                parentId: 3,
-                children: [
-                  {
-                    id: 321,
-                    name: 'name311',
-                    phone: '123456789+311',
-                    parentId: 32,
-                    children: [
-                      {
-                        id: 3211,
-                        name: 'name3111',
-                        phone: '123456789+3111',
-                        parentId: 322,
-                      },
-                      {
-                        id: 3212,
-                        name: 'name3112',
-                        phone: '123456789+3112',
-                        parentId: null,
-                      }
-                    ]
-                  }]
-              }]
-          },
-          {
-            id: 4,
-            name: 'name4',
-            phone: '123456789+4',
-            parentId: null,
-          }],
+        tableData: [],
         isDialogVisible: false,
       };
     },
-    mounted() {
+    created() {
       if (localStorage.getItem('tableData')) {
-        try {
-          this.tableData = JSON.parse(localStorage.getItem('tableData'));
-        } catch(error) {
-          localStorage.removeItem('tableData');
-        }
+        this._getData();
+      } else {
+        this._saveData(mockData);
+        this._getData();
       }
     },
     computed: {
@@ -113,10 +56,16 @@
           console.log('функционал пока не доступен :(');
         }
 
-        this._saveData();
+        this._saveData(this.tableData);
       },
-      _saveData() {
-        const parsed = JSON.stringify(this.tableData);
+      _getData() {
+        this.tableData = JSON.parse(localStorage.getItem('tableData'));
+      },
+      _clearData() {
+        localStorage.removeItem('tableData');
+      },
+      _saveData(data) {
+        const parsed = JSON.stringify(data);
         localStorage.setItem('tableData', parsed);
       },
       _getRandomId() {

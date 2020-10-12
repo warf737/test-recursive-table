@@ -58,6 +58,7 @@
     :visible.sync="isDialogVisible"
     :show-close="false"
     :destroy-on-close="true"
+    width="30%"
     >
 
     <el-form :model="dialogData" ref="dialogData">

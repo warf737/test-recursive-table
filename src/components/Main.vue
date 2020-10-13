@@ -65,7 +65,7 @@
           let result = null;
 
           const search = users => {
-            users.find(user => {
+            users.forEach(user => {
               if (user.id === matchingId) {
                 result = user;
               } else if (user.children.length) {

@@ -28,12 +28,12 @@
       userIdList() {
         let userList = [];
 
-        const getUserData = (e) => {
+        const getUserData = (user) => {
           userList.push({
-            id: e.id,
-            name: e.name,
+            id: user.id,
+            name: user.name,
           });
-          e.children && e.children.forEach(getUserData);
+          user.children && user.children.forEach(getUserData);
         };
 
         this.tableData.forEach(getUserData);
@@ -61,37 +61,29 @@
         if(!isChild) {
           this.tableData.push(newUser);
         } else {
-          let updatedUser = null;
-          for (let i = 0; updatedUser === null && i < this.tableData.length; i++) {
-            updatedUser = this._searchUser(this.tableData[i], newUser.parentId);
-          }
+          const matchingId = newUser.parentId;
+          let result = null;
 
+          const search = users => {
+            users.find(user => {
+              if (user.id === matchingId) {
+                result = user;
+              } else if (user.children.length) {
+                result = search(user.children);
+              }
+            });
+            return result;
+          };
+
+          const updatedUser = search(this.tableData);
           updatedUser.children.push(newUser);
         }
 
         this._saveData(this.tableData);
       },
-      _searchUser(user, matchingUserId) {
-        const isMatchingResult = user.id === matchingUserId;
-        const isUserHasChildren = Boolean(user.children);
-
-        if (isMatchingResult) {
-          return user;
-        } else if (isUserHasChildren) {
-          let result = null;
-          for (let i = 0; result === null && i < user.children.length; i++) {
-            result = this._searchUser(user.children[i], matchingUserId);
-          }
-          return result;
-        }
-        return null;
-        },
       _getData() {
         this.tableData = JSON.parse(localStorage.getItem('tableData'));
       },
-      // _clearData() {
-      //   localStorage.removeItem('tableData');
-      // },
       _saveData(data) {
         const parsed = JSON.stringify(data);
         localStorage.setItem('tableData', parsed);
@@ -101,7 +93,7 @@
         const isExistId = this.userIdList.find(userId => userId === newId);
 
         if (isExistId) {
-          this.getRandomId();
+          return this._getRandomId();
         } else {
           return newId;
         }
